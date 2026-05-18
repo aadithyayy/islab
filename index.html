@@ -2,8 +2,1361 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Information Security Lab — Algorithms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0d0f14;
+        --surface: #13161e;
+        --surface2: #1a1e28;
+        --border: #252a38;
+        --accent: #4ade80;
+        --accent2: #38bdf8;
+        --accent3: #f59e0b;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --heading: #f8fafc;
+        --mono: "IBM Plex Mono", monospace;
+        --sans: "IBM Plex Sans", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--sans);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+        font-size: 15px;
+      }
+
+      /* ── HEADER ── */
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 56px 24px 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 60% at 50% -10%,
+          #4ade8012 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .header-icon {
+        font-size: 2.4rem;
+        display: block;
+        margin-bottom: 16px;
+        filter: drop-shadow(0 0 16px #4ade8055);
+      }
+      header h1 {
+        font-family: var(--mono);
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
+        font-weight: 600;
+        color: var(--heading);
+        letter-spacing: -0.02em;
+      }
+      header h1 span {
+        color: var(--accent);
+      }
+      header p {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.92rem;
+        max-width: 520px;
+        margin-inline: auto;
+      }
+
+      /* ── NAV ── */
+      nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      nav a {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        text-decoration: none;
+        padding: 4px 10px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      nav a:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: #4ade800f;
+      }
+
+      /* ── MAIN ── */
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+      }
+
+      /* ── SECTION ── */
+      .program {
+        margin-bottom: 60px;
+        animation: fadein 0.4s ease both;
+      }
+      @keyframes fadein {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .program-header {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+      .prog-num {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--accent);
+        background: #4ade8015;
+        border: 1px solid #4ade8030;
+        padding: 2px 8px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .program h2 {
+        font-family: var(--mono);
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--heading);
+        letter-spacing: -0.01em;
+      }
+      .program > .desc {
+        color: var(--muted);
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+        padding-left: 2px;
+      }
+
+      /* file tag */
+      .file-tag {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--accent2);
+        background: #38bdf808;
+        border: 1px solid #38bdf825;
+        padding: 2px 9px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 14px;
+      }
+
+      /* sub-algorithm label */
+      .algo-label {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        color: var(--accent3);
+        margin-bottom: 10px;
+        margin-top: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* steps */
+      ol.steps {
+        list-style: none;
+        counter-reset: step;
+        padding: 0;
+        border-left: 2px solid var(--border);
+        margin-left: 6px;
+      }
+      ol.steps li {
+        counter-increment: step;
+        display: flex;
+        gap: 14px;
+        padding: 7px 0 7px 16px;
+        font-size: 0.9rem;
+        color: var(--text);
+        border-bottom: 1px solid #ffffff06;
+        position: relative;
+      }
+      ol.steps li::before {
+        content: counter(step);
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--accent);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        min-width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+        position: absolute;
+        left: -12px;
+      }
+      ol.steps li span {
+        padding-left: 18px;
+      }
+      code {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        color: var(--accent);
+        background: #4ade8010;
+        padding: 1px 5px;
+        border-radius: 3px;
+      }
+      code.blue {
+        color: var(--accent2);
+        background: #38bdf810;
+      }
+      code.yellow {
+        color: var(--accent3);
+        background: #f59e0b10;
+      }
+
+      /* sub-list inside steps */
+      ul.sub {
+        list-style: disc;
+        margin-top: 6px;
+        margin-left: 16px;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+      ul.sub li {
+        padding: 2px 0;
+      }
+
+      /* divider */
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 56px 0 0;
+      }
+
+      /* section heading (for grouped sections) */
+      .section-group-title {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-group-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* ── FUNCTIONS TABLE ── */
+      .fn-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+        margin-top: 8px;
+      }
+      .fn-table th {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        text-align: left;
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      .fn-table td {
+        padding: 9px 12px;
+        border-bottom: 1px solid #ffffff06;
+        vertical-align: top;
+      }
+      .fn-table tr:hover td {
+        background: #ffffff04;
+      }
+
+      /* ── KEY POINTS ── */
+      .kp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .kp-card {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        background: var(--surface);
+        transition: border-color 0.2s;
+      }
+      .kp-card:hover {
+        border-color: var(--accent);
+      }
+      .kp-card h4 {
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .kp-card ul {
+        list-style: none;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .kp-card ul li::before {
+        content: "→ ";
+        color: var(--accent);
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        text-align: center;
+        padding: 28px;
+        font-size: 0.8rem;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+        font-family: var(--mono);
+      }
+      footer span {
+        color: var(--accent);
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <header>
+      <span class="header-icon">🔐</span>
+      <h1>Information Security Lab — <span>Algorithms</span></h1>
+      <p>
+        Python & Shell programs for ciphers, public-key cryptography, digital
+        signatures and hash functions
+      </p>
+    </header>
+
+    <nav>
+      <a href="#caesar">Caesar</a>
+      <a href="#vigenere">Vigenère</a>
+      <a href="#playfair">Playfair</a>
+      <a href="#hill">Hill</a>
+      <a href="#railfence">Rail Fence</a>
+      <a href="#columnar">Columnar</a>
+      <a href="#rsa">RSA</a>
+      <a href="#rsa-sign">RSA Sign</a>
+      <a href="#sha">SHA-256</a>
+      <a href="#filecopy">File Copy</a>
+      <a href="#shell">Shell</a>
+      <a href="#functions">Functions</a>
+      <a href="#keypoints">Key Points</a>
+    </nav>
+
+    <main>
+      <!-- ═══════════════════════════════════ CLASSICAL CIPHERS ═══ -->
+      <div class="section-group-title">Classical Ciphers</div>
+
+      <!-- 1. Caesar -->
+      <div class="program" id="caesar">
+        <div class="program-header">
+          <span class="prog-num">01</span>
+          <h2>Caesar Cipher</h2>
+        </div>
+        <p class="desc">
+          Monoalphabetic substitution — each letter is shifted by a fixed key
+          value.
+        </p>
+        <span class="file-tag">ciphers/caesar.py</span>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span>Read plaintext message and shift key <code>k</code>.</span>
+          </li>
+          <li>
+            <span>For each character <code>c</code> in the message:</span>
+            <ul class="sub">
+              <li>
+                If letter → replace with character at position
+                <code>(ord(c) − base + k) mod 26</code>.
+              </li>
+              <li>If not a letter → keep unchanged.</li>
+            </ul>
+          </li>
+          <li><span>Append transformed character to ciphertext.</span></li>
+          <li><span>Print ciphertext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Decryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span>Read ciphertext and shift key <code>k</code>.</span>
+          </li>
+          <li>
+            <span
+              >Apply encryption algorithm with shift <code>26 − k</code> (or
+              <code>−k mod 26</code>).</span
+            >
+          </li>
+          <li><span>Print recovered plaintext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 2. Vigenere -->
+      <div class="program" id="vigenere">
+        <div class="program-header">
+          <span class="prog-num">02</span>
+          <h2>Vigenère Cipher</h2>
+        </div>
+        <p class="desc">
+          Polyalphabetic substitution — shift of each letter is determined by a
+          repeating keyword.
+        </p>
+        <span class="file-tag">ciphers/vigenere.py</span>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Read plaintext and keyword. Convert keyword to uppercase.</span
+            >
+          </li>
+          <li>
+            <span>Initialize keyword index <code>j = 0</code>.</span>
+          </li>
+          <li>
+            <span>For each character <code>c</code> in plaintext:</span>
+            <ul class="sub">
+              <li>
+                If letter → shift by
+                <code>ord(key[j mod len(key)]) − ord('A')</code>.
+              </li>
+              <li>Increment <code>j</code> only for letter characters.</li>
+              <li>Append encrypted character to ciphertext.</li>
+            </ul>
+          </li>
+          <li><span>Print ciphertext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Decryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li><span>Read ciphertext and keyword.</span></li>
+          <li>
+            <span
+              >For each character, subtract the keyword shift instead of
+              adding.</span
+            >
+          </li>
+          <li>
+            <span>Take result <code>mod 26</code> to handle wrap-around.</span>
+          </li>
+          <li><span>Print plaintext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 3. Playfair -->
+      <div class="program" id="playfair">
+        <div class="program-header">
+          <span class="prog-num">03</span>
+          <h2>Playfair Cipher</h2>
+        </div>
+        <p class="desc">
+          Digraph substitution cipher using a 5×5 key matrix. Encrypts pairs of
+          letters.
+        </p>
+        <span class="file-tag">ciphers/playfair.py</span>
+
+        <div class="algo-label">Algorithm — Key Matrix Construction</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Read keyword. Remove duplicate letters. Treat I and J as the
+              same.</span
+            >
+          </li>
+          <li>
+            <span
+              >Fill a 5×5 matrix with keyword letters first, then remaining
+              alphabet letters.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Prepare plaintext: remove spaces, replace J with I, insert
+              <code>X</code> between duplicate letters in a pair, pad with
+              <code>X</code> if length is odd.</span
+            >
+          </li>
+          <li><span>Split into digraphs (pairs of two letters).</span></li>
+          <li>
+            <span
+              >For each pair <code>(a, b)</code>, find their row and column in
+              the matrix:</span
+            >
+            <ul class="sub">
+              <li>
+                Same row → replace each with the letter to its right (wrap
+                around).
+              </li>
+              <li>
+                Same column → replace each with the letter below it (wrap
+                around).
+              </li>
+              <li>
+                Rectangle → swap columns: <code>a</code> takes <code>b</code>'s
+                column, <code>b</code> takes <code>a</code>'s column.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <span>Concatenate all encrypted pairs and print ciphertext.</span>
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 4. Hill -->
+      <div class="program" id="hill">
+        <div class="program-header">
+          <span class="prog-num">04</span>
+          <h2>Hill Cipher</h2>
+        </div>
+        <p class="desc">
+          Block cipher using matrix multiplication over integers mod 26.
+        </p>
+        <span class="file-tag">ciphers/hill.py</span>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Read plaintext and an <code>n×n</code> key matrix
+              <code>K</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Convert plaintext to numeric vector (A=0, B=1, …, Z=25).</span
+            >
+          </li>
+          <li>
+            <span
+              >Split vector into blocks of size <code>n</code>. Pad with zeros
+              if needed.</span
+            >
+          </li>
+          <li>
+            <span
+              >For each block <code>P</code>, compute ciphertext block:
+              <code>C = (K × P) mod 26</code>.</span
+            >
+          </li>
+          <li><span>Convert numeric result back to letters.</span></li>
+          <li><span>Print ciphertext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Decryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Compute the modular inverse of key matrix <code>K</code> mod
+              26.</span
+            >
+          </li>
+          <li>
+            <span
+              >For each ciphertext block <code>C</code>, compute:
+              <code>P = (K⁻¹ × C) mod 26</code>.</span
+            >
+          </li>
+          <li><span>Convert back to letters and print plaintext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 5. Rail Fence -->
+      <div class="program" id="railfence">
+        <div class="program-header">
+          <span class="prog-num">05</span>
+          <h2>Rail Fence Cipher</h2>
+        </div>
+        <p class="desc">
+          Transposition cipher — plaintext is written in a zigzag across
+          <code>n</code> rails.
+        </p>
+        <span class="file-tag">ciphers/rail_fence.py</span>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span>Read plaintext and number of rails <code>n</code>.</span>
+          </li>
+          <li>
+            <span>Create <code>n</code> empty strings (one per rail).</span>
+          </li>
+          <li>
+            <span
+              >Traverse plaintext: assign each character to a rail in zigzag
+              order (0→n−1→0→…).</span
+            >
+          </li>
+          <li>
+            <span>Concatenate all rails in order to form ciphertext.</span>
+          </li>
+          <li><span>Print ciphertext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Decryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Determine the length each rail holds by simulating the zigzag
+              pattern.</span
+            >
+          </li>
+          <li>
+            <span
+              >Split ciphertext into rail segments according to those
+              lengths.</span
+            >
+          </li>
+          <li>
+            <span
+              >Re-traverse the zigzag, reading one character from each rail's
+              segment in order.</span
+            >
+          </li>
+          <li><span>Print recovered plaintext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 6. Columnar -->
+      <div class="program" id="columnar">
+        <div class="program-header">
+          <span class="prog-num">06</span>
+          <h2>Columnar Transposition Cipher</h2>
+        </div>
+        <p class="desc">
+          Plaintext is arranged in a grid; columns are rearranged according to
+          the key order.
+        </p>
+        <span class="file-tag">ciphers/columnar.py</span>
+
+        <div class="algo-label">Algorithm — Encryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span>Read plaintext and keyword of length <code>k</code>.</span>
+          </li>
+          <li>
+            <span
+              >Pad plaintext with <code>X</code> to make its length a multiple
+              of <code>k</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Arrange padded text row-by-row in a grid with
+              <code>k</code> columns.</span
+            >
+          </li>
+          <li>
+            <span
+              >Determine column order by sorting the keyword letters
+              alphabetically.</span
+            >
+          </li>
+          <li>
+            <span
+              >Read columns in sorted keyword order and concatenate to form
+              ciphertext.</span
+            >
+          </li>
+          <li><span>Print ciphertext.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Decryption</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Determine number of rows:
+              <code>ceil(len(ciphertext) / k)</code>.</span
+            >
+          </li>
+          <li><span>Determine sorted column order from keyword.</span></li>
+          <li>
+            <span>Split ciphertext into columns of appropriate length.</span>
+          </li>
+          <li>
+            <span
+              >Re-insert columns into a grid at their original positions
+              (reverse sorted order).</span
+            >
+          </li>
+          <li>
+            <span
+              >Read grid row-by-row and strip padding to get plaintext.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <hr />
+
+      <!-- ═══════════════════════════════════ PUBLIC KEY ═══ -->
+      <div class="section-group-title" style="margin-top: 48px">
+        Public Key Cryptography
+      </div>
+
+      <!-- 7. RSA -->
+      <div class="program" id="rsa">
+        <div class="program-header">
+          <span class="prog-num">07</span>
+          <h2>RSA Encryption &amp; Decryption</h2>
+        </div>
+        <p class="desc">
+          Asymmetric cipher based on the difficulty of factoring large integers.
+        </p>
+        <span class="file-tag">rsa.py</span>
+
+        <div class="algo-label">Algorithm — Key Generation</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Input two prime numbers <code>p</code> and <code>q</code>.</span
+            >
+          </li>
+          <li>
+            <span>Compute <code>n = p × q</code> (modulus).</span>
+          </li>
+          <li>
+            <span
+              >Compute Euler's totient: <code>φ(n) = (p−1) × (q−1)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Find all valid public exponents <code>e</code> where
+              <code>2 &lt; e &lt; φ(n)</code> and
+              <code>gcd(e, φ(n)) = 1</code>.</span
+            >
+          </li>
+          <li>
+            <span>Choose an <code>e</code> from the list.</span>
+          </li>
+          <li>
+            <span
+              >Compute private key <code>d = e⁻¹ mod φ(n)</code> using
+              <code class="blue">mod_inverse(e, φ)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Public key: <code>(e, n)</code>. Private key:
+              <code>(d, n)</code>.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Encrypt &amp; Decrypt</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span>Input message as integer <code>m</code>.</span>
+          </li>
+          <li>
+            <span
+              >Encrypt: <code>c = m<sup>e</sup> mod n</code> using
+              <code class="blue">pow(m, e, n)</code>.</span
+            >
+          </li>
+          <li>
+            <span>Print ciphertext <code>c</code>.</span>
+          </li>
+          <li>
+            <span
+              >Decrypt: <code>m = c<sup>d</sup> mod n</code> using
+              <code class="blue">pow(c, d, n)</code>.</span
+            >
+          </li>
+          <li><span>Print decrypted message.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 8. RSA Sign -->
+      <div class="program" id="rsa-sign">
+        <div class="program-header">
+          <span class="prog-num">08</span>
+          <h2>RSA Digital Signature</h2>
+        </div>
+        <p class="desc">
+          Sign a message with the private key; verify authenticity using the
+          public key.
+        </p>
+        <span class="file-tag">rsa_sign.py</span>
+
+        <div class="algo-label">Algorithm — Signing</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Generate RSA keys <code>(e, d, n)</code> as in the RSA algorithm
+              above.</span
+            >
+          </li>
+          <li><span>Read the message string.</span></li>
+          <li>
+            <span
+              >Compute hash: <code>h = int(SHA-256(message), 16)</code> using
+              <code class="blue">hashlib.sha256</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Sign: <code>sig = h<sup>d</sup> mod n</code> (sign with private
+              key).</span
+            >
+          </li>
+          <li><span>Print signature.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Algorithm — Verification</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Receive message, signature <code>sig</code>, and public key
+              <code>(e, n)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Recompute hash of message:
+              <code>h = int(SHA-256(message), 16)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Decrypt signature:
+              <code>verify = sig<sup>e</sup> mod n</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >If <code>verify == h mod n</code> → print
+              <em>"Signature valid"</em>.</span
+            >
+          </li>
+          <li>
+            <span>Else → print <em>"Signature invalid"</em>.</span>
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <hr />
+
+      <!-- ═══════════════════════════════════ HASH & OS ═══ -->
+      <div class="section-group-title" style="margin-top: 48px">
+        Hash Functions &amp; System Programs
+      </div>
+
+      <!-- 9. SHA -->
+      <div class="program" id="sha">
+        <div class="program-header">
+          <span class="prog-num">09</span>
+          <h2>SHA-256 Hash &amp; Avalanche Effect</h2>
+        </div>
+        <p class="desc">
+          Demonstrates the avalanche effect — small input changes cause
+          drastically different hash outputs.
+        </p>
+        <span class="file-tag">sha.py</span>
+
+        <div class="algo-label">Algorithm</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Read two input strings <code>s1</code> and <code>s2</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Compute <code>h1 = SHA-256(s1)</code> using
+              <code class="blue">hashlib.sha256(s1.encode()).hexdigest()</code
+              >.</span
+            >
+          </li>
+          <li>
+            <span>Compute <code>h2 = SHA-256(s2)</code> similarly.</span>
+          </li>
+          <li><span>Print both hex digest strings.</span></li>
+          <li>
+            <span
+              >Convert both digests to integers and XOR them:
+              <code>x = int(h1,16) XOR int(h2,16)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Count the number of 1-bits in <code>x</code> using
+              <code class="blue">bin(x).count('1')</code> — this is the number
+              of differing bits.</span
+            >
+          </li>
+          <li><span>Print the differing bit count.</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <!-- 10. File Copy -->
+      <div class="program" id="filecopy">
+        <div class="program-header">
+          <span class="prog-num">10</span>
+          <h2>File Copy using OS System Calls</h2>
+        </div>
+        <p class="desc">
+          Copies a file at the OS level using low-level file descriptors instead
+          of Python's high-level file API.
+        </p>
+        <span class="file-tag">filecopy.py</span>
+
+        <div class="algo-label">Algorithm</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Read source filename and destination filename from user.</span
+            >
+          </li>
+          <li>
+            <span
+              >Open source file in read-only mode:
+              <code class="blue">os.open(source, os.O_RDONLY)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Open (or create) destination file in write mode:
+              <code class="blue"
+                >os.open(dest, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                0o644)</code
+              >.</span
+            >
+          </li>
+          <li>
+            <span
+              >Read data from source into buffer:
+              <code class="blue">os.read(src, 1024)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Write buffer to destination:
+              <code class="blue">os.write(dest, data)</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Close both file descriptors using
+              <code class="blue">os.close()</code>.</span
+            >
+          </li>
+          <li><span>Print "File copied successfully".</span></li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <hr />
+
+      <!-- ═══════════════════════════════════ SHELL ═══ -->
+      <div class="section-group-title" style="margin-top: 48px">
+        Shell Scripts
+      </div>
+
+      <div class="program" id="shell">
+        <div class="program-header">
+          <span class="prog-num">11</span>
+          <h2>Shell Scripts — Linux Security &amp; Administration</h2>
+        </div>
+        <p class="desc">
+          Bash scripts covering user management, file permissions, firewall
+          configuration and system info.
+        </p>
+        <span class="file-tag">shell/</span>
+
+        <div class="algo-label">User Management — user_mgmt.sh</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Use <code class="yellow">useradd</code> to create a new user with
+              home directory.</span
+            >
+          </li>
+          <li>
+            <span
+              >Set password using
+              <code class="yellow">passwd &lt;username&gt;</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Add user to a group using
+              <code class="yellow">usermod -aG &lt;group&gt; &lt;user&gt;</code
+              >.</span
+            >
+          </li>
+          <li>
+            <span
+              >Verify by listing user info with
+              <code class="yellow">id &lt;username&gt;</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Delete user using
+              <code class="yellow">userdel -r &lt;username&gt;</code> if
+              required.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">File Permissions — file_perms.sh</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Create a test file and view its permissions using
+              <code class="yellow">ls -l</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Change permissions using
+              <code class="yellow">chmod 755 &lt;file&gt;</code> (owner: rwx,
+              group/others: rx).</span
+            >
+          </li>
+          <li>
+            <span
+              >Change file owner using
+              <code class="yellow"
+                >chown &lt;user&gt;:&lt;group&gt; &lt;file&gt;</code
+              >.</span
+            >
+          </li>
+          <li>
+            <span
+              >Verify changes with
+              <code class="yellow">ls -l</code> again.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">Firewall Rules — firewall.sh</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Check current firewall status:
+              <code class="yellow">ufw status</code>.</span
+            >
+          </li>
+          <li>
+            <span>Allow SSH: <code class="yellow">ufw allow 22</code>.</span>
+          </li>
+          <li>
+            <span
+              >Allow HTTP/HTTPS: <code class="yellow">ufw allow 80</code> and
+              <code class="yellow">ufw allow 443</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Deny a specific port:
+              <code class="yellow">ufw deny &lt;port&gt;</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Enable firewall: <code class="yellow">ufw enable</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Verify rules:
+              <code class="yellow">ufw status verbose</code>.</span
+            >
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+
+        <div class="algo-label">System Info — sysinfo.sh</div>
+        <ol class="steps">
+          <li><span>Start.</span></li>
+          <li>
+            <span
+              >Print CPU info: <code class="yellow">lscpu</code> or
+              <code class="yellow">cat /proc/cpuinfo</code>.</span
+            >
+          </li>
+          <li>
+            <span
+              >Print memory usage: <code class="yellow">free -h</code>.</span
+            >
+          </li>
+          <li>
+            <span>Print disk usage: <code class="yellow">df -h</code>.</span>
+          </li>
+          <li>
+            <span
+              >Print running processes: <code class="yellow">top -n 1</code> or
+              <code class="yellow">ps aux</code>.</span
+            >
+          </li>
+          <li>
+            <span>Print OS details: <code class="yellow">uname -a</code>.</span>
+          </li>
+          <li><span>Stop.</span></li>
+        </ol>
+      </div>
+
+      <hr />
+
+      <!-- ═══════════════════════════════════ FUNCTIONS TABLE ═══ -->
+      <div class="program" id="functions" style="margin-top: 48px">
+        <h2
+          style="
+            font-family: var(--mono);
+            font-size: 1rem;
+            color: var(--heading);
+            margin-bottom: 16px;
+          "
+        >
+          ⚙️ Key Functions &amp; Modules
+        </h2>
+        <table class="fn-table">
+          <thead>
+            <tr>
+              <th>Function / Module</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sympy.gcd(a, b)</code></td>
+              <td>Compute GCD — used to find valid RSA public exponents</td>
+            </tr>
+            <tr>
+              <td><code>sympy.mod_inverse(e, φ)</code></td>
+              <td>
+                Compute modular inverse for RSA private key <code>d</code>
+              </td>
+            </tr>
+            <tr>
+              <td><code>pow(m, e, n)</code></td>
+              <td>
+                Fast modular exponentiation — RSA encrypt / decrypt / sign
+              </td>
+            </tr>
+            <tr>
+              <td><code>hashlib.sha256(s.encode())</code></td>
+              <td>Generate SHA-256 hash of a string</td>
+            </tr>
+            <tr>
+              <td><code>.hexdigest()</code></td>
+              <td>Return hash as a 64-character hex string</td>
+            </tr>
+            <tr>
+              <td><code>int(hash, 16)</code></td>
+              <td>Convert hex digest to integer for XOR or signing</td>
+            </tr>
+            <tr>
+              <td><code>bin(x).count('1')</code></td>
+              <td>Count differing bits (avalanche effect)</td>
+            </tr>
+            <tr>
+              <td><code>os.open(path, flags)</code></td>
+              <td>Open file using low-level OS file descriptor</td>
+            </tr>
+            <tr>
+              <td><code>os.read(fd, n)</code></td>
+              <td>Read <code>n</code> bytes from a file descriptor</td>
+            </tr>
+            <tr>
+              <td><code>os.write(fd, data)</code></td>
+              <td>Write bytes to a file descriptor</td>
+            </tr>
+            <tr>
+              <td><code>os.close(fd)</code></td>
+              <td>Close a file descriptor</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <!-- ═══════════════════════════════════ KEY POINTS ═══ -->
+      <div class="program" id="keypoints" style="margin-top: 48px">
+        <h2
+          style="
+            font-family: var(--mono);
+            font-size: 1rem;
+            color: var(--heading);
+            margin-bottom: 16px;
+          "
+        >
+          🔑 Key Points
+        </h2>
+        <div class="kp-grid">
+          <div class="kp-card">
+            <h4>Caesar / Vigenère</h4>
+            <ul>
+              <li>Caesar is monoalphabetic (fixed shift)</li>
+              <li>Vigenère is polyalphabetic (keyword shifts)</li>
+              <li>Both vulnerable to frequency analysis</li>
+              <li>Decryption = reverse shift</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>Playfair</h4>
+            <ul>
+              <li>Operates on digraphs (pairs of letters)</li>
+              <li>I and J share one cell in 5×5 matrix</li>
+              <li>Insert X between duplicate pair letters</li>
+              <li>Three rules: same row, col, or rectangle</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>Hill Cipher</h4>
+            <ul>
+              <li>Uses matrix multiplication mod 26</li>
+              <li>Key matrix must be invertible mod 26</li>
+              <li>Decryption uses matrix inverse mod 26</li>
+              <li>Resistant to simple frequency analysis</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>Transposition Ciphers</h4>
+            <ul>
+              <li>Rearrange characters, do not substitute</li>
+              <li>Rail Fence: zigzag across n rails</li>
+              <li>Columnar: keyword determines column order</li>
+              <li>Decryption reconstructs the original grid</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>RSA</h4>
+            <ul>
+              <li>Security relies on integer factorization</li>
+              <li>n = p × q; φ(n) = (p−1)(q−1)</li>
+              <li>Public key (e, n); Private key (d, n)</li>
+              <li>e·d ≡ 1 mod φ(n)</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>Digital Signature</h4>
+            <ul>
+              <li>Sign with private key; verify with public</li>
+              <li>Hash ensures message integrity</li>
+              <li>Provides authenticity + non-repudiation</li>
+              <li>sig = hash^d mod n</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>SHA-256</h4>
+            <ul>
+              <li>Produces fixed 256-bit output</li>
+              <li>One-way — cannot reverse to input</li>
+              <li>Avalanche effect: 1-bit change → ~50% different bits</li>
+              <li>Used in signatures and integrity checks</li>
+            </ul>
+          </div>
+          <div class="kp-card">
+            <h4>OS File Operations</h4>
+            <ul>
+              <li>os.open is lower-level than open()</li>
+              <li>Returns integer file descriptor</li>
+              <li>Flags: O_RDONLY, O_WRONLY, O_CREAT</li>
+              <li>Always close fd with os.close()</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      Made for <span>Information Security Lab</span> — APJ Abdul Kalam
+      Technological University
+    </footer>
+  </body>
 </html>
