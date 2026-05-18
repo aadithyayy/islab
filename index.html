@@ -195,22 +195,24 @@
         border-left: 2px solid var(--border);
         margin-left: 8px;
       }
-      ol.steps li {
+      ol.steps > li {
         counter-increment: step;
         position: relative;
-        padding: 7px 0 7px 32px;
+        padding: 8px 0 8px 32px;
         font-size: 0.9rem;
         color: var(--text);
         border-bottom: 1px solid #ffffff05;
+        /* let content wrap cleanly */
+        word-break: break-word;
       }
-      ol.steps li::before {
+      ol.steps > li::before {
         content: counter(step);
         font-family: var(--mono);
         font-size: 0.68rem;
         color: var(--accent);
         background: var(--bg);
         border: 1px solid var(--border);
-        min-width: 20px;
+        width: 20px;
         height: 20px;
         border-radius: 3px;
         display: flex;
@@ -218,40 +220,122 @@
         justify-content: center;
         position: absolute;
         left: -11px;
-        top: 10px;
+        top: 11px;
+        flex-shrink: 0;
       }
+
+      /* sub-list: each item is a flex row so the arrow and text don't smush */
       ul.sub {
         list-style: none;
-        margin-top: 5px;
-        margin-left: 4px;
+        margin-top: 6px;
+        margin-left: 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       }
       ul.sub li {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
         color: var(--muted);
         font-size: 0.86rem;
-        padding: 2px 0;
+        line-height: 1.6;
+        word-break: break-word;
       }
       ul.sub li::before {
-        content: "-> ";
+        content: "→";
         color: var(--accent);
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        flex-shrink: 0;
+        margin-top: 2px;
       }
 
       code {
         font-family: var(--mono);
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         color: var(--accent);
         background: #4ade8010;
         padding: 1px 5px;
         border-radius: 3px;
+        /* prevent code from breaking onto a new line mid-token where possible */
+        white-space: nowrap;
       }
       code.b {
         color: var(--accent2);
         background: #38bdf810;
       }
 
+      /* on very small screens allow code to wrap */
+      @media (max-width: 480px) {
+        code {
+          white-space: normal;
+          word-break: break-all;
+        }
+      }
+
       hr {
         border: none;
         border-top: 1px solid var(--border);
         margin: 52px 0 0;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 640px) {
+        header {
+          padding: 36px 16px 28px;
+        }
+        main {
+          padding: 32px 16px 60px;
+        }
+        nav {
+          padding: 12px 16px;
+          gap: 5px;
+        }
+        nav a {
+          font-size: 0.68rem;
+          padding: 3px 8px;
+        }
+        .program h2 {
+          font-size: 0.92rem;
+        }
+        ol.steps > li {
+          font-size: 0.86rem;
+          padding-left: 28px;
+        }
+        ol.steps > li::before {
+          width: 18px;
+          height: 18px;
+          font-size: 0.62rem;
+          left: -10px;
+        }
+        ul.sub li {
+          font-size: 0.82rem;
+        }
+        .algo-label {
+          font-size: 0.7rem;
+        }
+        .group-title {
+          font-size: 0.65rem;
+        }
+      }
+
+      @media (max-width: 400px) {
+        header h1 {
+          font-size: 1.1rem;
+        }
+        .prog-num {
+          display: none;
+        }
+        ol.steps {
+          margin-left: 4px;
+        }
+        ol.steps > li {
+          padding-left: 22px;
+        }
+        ol.steps > li::before {
+          left: -9px;
+        }
       }
 
       footer {
