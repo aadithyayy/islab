@@ -44,8 +44,8 @@ Each script is independent and can be executed separately for the corresponding 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/Binahaagit/is_lab.git
-cd is_lab
+git clone https://github.com/aadithyayy/islab.git
+cd islab
 ```
 
 2. Install required Python library:
